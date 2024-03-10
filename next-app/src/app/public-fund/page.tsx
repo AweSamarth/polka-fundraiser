@@ -1,6 +1,6 @@
 "use client";
 
-import {workingConfig, anotherConfig} from "@/utils/utils";
+import { workingConfig, anotherConfig } from "@/utils/utils";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
@@ -9,10 +9,10 @@ import { Progress } from "@/components/ui/progress";
 import { abi, FUNDRAISER_CONTRACT_ADDRESS } from "@/constants/constants";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import {readContract } from "@wagmi/core";
+import { readContract } from "@wagmi/core";
 import { useWriteContract } from "wagmi";
-import { createPublicClient, http } from 'viem'
-import { sepolia } from 'viem/chains'
+import { createPublicClient, http } from "viem";
+import { sepolia } from "viem/chains";
 
 import { queryClient } from "../providers";
 
@@ -23,10 +23,10 @@ export default function Page({ params }: { params: { slug: string } }) {
   const [isRunPublicFundActive, setIsRunPublicFundActive] = useState<any>();
   const [value, setValue] = useState(0);
   var doubleUseEffectCorrector = 0;
-  
+
   const { writeContract } = useWriteContract();
 
-  // const publicClient = createPublicClient({ 
+  // const publicClient = createPublicClient({
   //   chain: sepolia,
   //   transport: http("https://rpc.sepolia.org")
   // })
@@ -38,9 +38,7 @@ export default function Page({ params }: { params: { slug: string } }) {
   //     functionName: "isRunPublicFundActive",
   //   })
 
-
   // }
-
 
   async function contractReader() {
     const result = await readContract(workingConfig, {
@@ -50,7 +48,6 @@ export default function Page({ params }: { params: { slug: string } }) {
     });
 
     setPublicFundBalance(result);
-
 
     const numberOfCampaigns = await readContract(workingConfig, {
       abi,
@@ -71,8 +68,6 @@ export default function Page({ params }: { params: { slug: string } }) {
     setLoading(false);
   }
 
- 
-
   useEffect(() => {
     if (doubleUseEffectCorrector < 1) {
       contractReader();
@@ -87,8 +82,7 @@ export default function Page({ params }: { params: { slug: string } }) {
       functionName: "fundPublicFund",
       value: BigInt(value),
     });
-    queryClient.invalidateQueries()
-
+    queryClient.invalidateQueries();
   }
 
   async function breakTreasury() {
@@ -97,10 +91,38 @@ export default function Page({ params }: { params: { slug: string } }) {
       address: FUNDRAISER_CONTRACT_ADDRESS,
       functionName: "runPublicFund",
       args: [Math.floor(Math.random() * Number(numberOfCampaigns)) + 1],
+      // the above line has to be replaced with Acuracast's decentralized compute that runs on a contract. My job wasn't getting processors
+      // assigned to it. Even after repeated attempts, it was not possible to get in touch with the Acurast team so i used math.random.
+      // The contract is in foundry/src/EntropyProvider.sol. The job script will be:
+      /*
+Destination contract address
+const destination = "0x06dA3169CfEA164E8308b5977D89E296e75FB62D";
+// Generate entropy
+const entropy = _STD_.random.generateSecureRandomHex();
+// Fulfill entropy
+_STD_.chains.ethereum.fulfill(
+  "https://rpc.api.moonbase.moonbeam.network", // RPC
+  destination, // Destination contract address
+  entropy, // Payload
+  // Transaction parameters
+  {
+    methodSignature: "receive_entropy(bytes)",
+    gasLimit: "9000000",
+    maxFeePerGas: "255000000000",
+    maxPriorityFeePerGas: "2550000000",
+  },
+  // Success callback
+  (opHash) => {
+    print("Succeeded: " + opHash);
+  },
+  // Error callback
+  (err) => {
+    print("Failed: " + err);
+  }
+);*/
     });
 
-    queryClient.invalidateQueries()
-
+    queryClient.invalidateQueries();
   }
 
   return (
@@ -157,38 +179,36 @@ export default function Page({ params }: { params: { slug: string } }) {
             </div>
 
             <div className="flex flex-col gap-5">
-            <div className="flex w-full max-w-sm self-center items-center justify-center space-x-2">
-
-              <Input
-                type="number"
-                placeholder="amount "
-                value={value}
-                onChange={(e) => setValue(Number(e.target.value))}
-                className="text-lg  bg-gray-900 w-40 h- outline-none border-0"
-              />
-              <Button
-                onClick={fundPublicFund}
-                className="bg-[#256963] text-md hover:bg-[#194240] "
-              >
-                Fund it!
-              </Button>
+              <div className="flex w-full max-w-sm self-center items-center justify-center space-x-2">
+                <Input
+                  type="number"
+                  placeholder="amount "
+                  value={value}
+                  onChange={(e) => setValue(Number(e.target.value))}
+                  className="text-lg  bg-gray-900 w-40 h- outline-none border-0"
+                />
+                <Button
+                  onClick={fundPublicFund}
+                  className="bg-[#256963] text-md hover:bg-[#194240] "
+                >
+                  Fund it!
+                </Button>
               </div>
               {isRunPublicFundActive && (
                 <Button
-                className="bg-[#ac8a2a] w-min self-center text-[#fffdfd] text-md hover:bg-[#756129]"
-                onClick={breakTreasury}
+                  className="bg-[#ac8a2a] w-min self-center text-[#fffdfd] text-md hover:bg-[#756129]"
+                  onClick={breakTreasury}
                 >
                   Break Treasury
                 </Button>
               )}
-
             </div>
           </div>
         </div>
       )}
       <div className="w-full absolute bottom-0">
-     <Footer />
-     </div>
+        <Footer />
+      </div>
     </main>
   );
 }
