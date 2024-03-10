@@ -20,16 +20,26 @@ export default function Page({ params }: { params: { slug: string } }) {
   const [publicFundBalance, setPublicFundBalance] = useState<any>();
   const [numberOfCampaigns, setNumberOfCampaigns] = useState<any>();
   const [loading, setLoading] = useState(true);
-  const [isRunPublicFundActive, setIsRunPublicFundActive] = useState(false);
+  const [isRunPublicFundActive, setIsRunPublicFundActive] = useState<any>();
   const [value, setValue] = useState(0);
   var doubleUseEffectCorrector = 0;
   
   const { writeContract } = useWriteContract();
-  const publicClient = createPublicClient({ 
-    chain: sepolia,
-    transport: http("https://rpc.sepolia.org")
-  })
-  console.log(publicClient)
+
+  // const publicClient = createPublicClient({ 
+  //   chain: sepolia,
+  //   transport: http("https://rpc.sepolia.org")
+  // })
+  // console.log(publicClient)
+  // async function checkIsRunPublicFundActive() {
+  //   const data = await publicClient.readContract({
+  //     address: FUNDRAISER_CONTRACT_ADDRESS,
+  //     abi,
+  //     functionName: "isRunPublicFundActive",
+  //   })
+
+
+  // }
 
 
   async function contractReader() {
@@ -52,20 +62,18 @@ export default function Page({ params }: { params: { slug: string } }) {
     //@ts-ignore
     setNumberOfCampaigns(numberOfCampaigns);
     console.log((numberOfCampaigns));
+
+    const isRunPublicFundActive = await readContract(workingConfig, {
+      abi,
+      address: FUNDRAISER_CONTRACT_ADDRESS,
+      functionName: "isRunPublicFundActive",
+    });
+
+    setIsRunPublicFundActive(isRunPublicFundActive);
     setLoading(false);
   }
 
  
-
-  async function checkIsRunPublicFundActive() {
-    const data = await publicClient.readContract({
-      address: FUNDRAISER_CONTRACT_ADDRESS,
-      abi,
-      functionName: "isRunPublicFundActive",
-    })
-
-
-  }
 
   useEffect(() => {
     if (doubleUseEffectCorrector < 1) {
@@ -152,7 +160,9 @@ export default function Page({ params }: { params: { slug: string } }) {
               {publicFundBalance ? Number(publicFundBalance) : 0}
             </div>
 
+            <div className="flex flex-col gap-5">
             <div className="flex w-full max-w-sm self-center items-center justify-center space-x-2">
+
               <Input
                 type="number"
                 placeholder="amount "
@@ -166,19 +176,16 @@ export default function Page({ params }: { params: { slug: string } }) {
               >
                 Fund it!
               </Button>
+              </div>
               {isRunPublicFundActive && (
                 <Button
-                className="bg-[#256963] text-md hover:bg-[#194240]"
+                className="bg-[#ac8a2a] w-min self-center text-[#fffdfd] text-md hover:bg-[#756129]"
                 onClick={breakTreasury}
                 >
                   Break Treasury
                 </Button>
               )}
 
-              <Button
-                className="bg-[#256963] text-md hover:bg-[#194240]"
-                onClick={checkIsRunPublicFundActive}
-              ></Button>
             </div>
           </div>
         </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { workingConfig } from "@/app/explore/page";
+import { workingConfig } from "@/utils/utils";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
@@ -123,7 +123,7 @@ export default function Page({ params }: { params: { slug: string } }) {
               <Input
                 type="number"
                 placeholder="amount "
-                value={value}
+                value={value?value:""}
                 onChange={(e)=>setValue(Number(e.target.value))}
                 className="text-lg  bg-gray-900 w-40 h- outline-none border-0"
               />

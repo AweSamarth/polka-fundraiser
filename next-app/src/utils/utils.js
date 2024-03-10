@@ -7,7 +7,7 @@ export const workingConfig = createConfig({
     connectors: [injected()], 
     transports: {
       [moonbaseAlpha.id]: http("https://rpc.api.moonbase.moonbeam.network"),
-      [sepolia.id]: http("https://rpc.sepolia.org"),
+      [sepolia.id]: http(process.env.NEXT_PUBLIC_GETBLOCK_RPC_PROVIDER),
     },
   
   }); 
@@ -16,7 +16,7 @@ export const workingConfig = createConfig({
     chains: [sepolia],
     connectors: [injected()], 
     transports: {
-      [sepolia.id]: http("https://rpc.sepolia.org"),
+      [sepolia.id]: http(process.env.NEXT_PUBLIC_GETBLOCK_RPC_PROVIDER),
     },
   
   })

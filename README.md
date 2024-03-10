@@ -11,7 +11,7 @@ PolkaCampaign is a decentralized crowdfunding platform built on Moonbase alphane
 
 ## USP
 ### Using human psychology to make the platform more appealing to users and fund campaigns fast. 
-The public fund treasury can be broken after every two donations on the platform, be those to a campaign or the public fund. The person who breaks the treasury gets to keep 10% of the public fund while a random campaign gets the remaining 90%. Users' greed will drive them to fund more and more, thinking they might be the next one to break the treasury and get the rewards. Net profit here will probabalistically be for campaigns, not users.
+The public fund treasury can be broken after every two donations on the platform, be those to a campaign or the public fund. The person who breaks the treasury gets to keep 10% of the public fund while a random campaign gets the remaining 90%. Users' greed will drive them to fund more and more, thinking they might be the next one to break the treasury and get the rewards. Net profit here will probabilistically be for campaigns, not users.
 
 ## Tech Stack
 - Smart contract: Solidity
