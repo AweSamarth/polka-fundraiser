@@ -1,4 +1,5 @@
 # PolkaCampaign
+![Screenshot 2024-03-10 163029](https://github.com/AweSamarth/polka-fundraiser/assets/72488638/3963950a-2aa7-4c62-8ea9-1181b1ebd73c)
 PolkaCampaign is a decentralized crowdfunding platform built on Moonbase alphanet. Users can easily create campaigns and get them funded by the community. It also has a public fund where users can donate to the fund and the fund goes to a random campaign on the platform. 
 
 ## Key Features
@@ -11,6 +12,7 @@ PolkaCampaign is a decentralized crowdfunding platform built on Moonbase alphane
 
 ## USP
 ### Using human psychology to make the platform more appealing to users and fund campaigns fast. 
+![image](https://github.com/AweSamarth/polka-fundraiser/assets/72488638/b1330c4a-c745-4399-95f4-f9a5b24c3486)
 The public fund treasury can be broken after every two donations on the platform, be those to a campaign or the public fund. The person who breaks the treasury gets to keep 10% of the public fund while a random campaign gets the remaining 90%. Users' greed will drive them to fund more and more, thinking they might be the next one to break the treasury and get the rewards. Net profit here will probabilistically be for campaigns, not users.
 
 ## Tech Stack
