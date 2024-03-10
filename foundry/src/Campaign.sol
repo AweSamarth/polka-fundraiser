@@ -114,7 +114,7 @@ contract Fundraiser {
         else{
 
             if(temp.fundsReceivedInWei < temp.fundsWithdrawnInWei){
-                revert Campaign__NotSlickEnough();
+                revert Campaign__TransactionFailed();
             }
             else{
             (bool success, ) = payable(msg.sender).call{value:temp.fundsReceivedInWei-temp.fundsWithdrawnInWei}("");

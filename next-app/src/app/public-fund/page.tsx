@@ -1,32 +1,36 @@
 "use client";
 
-import { workingConfig } from "@/app/explore/page";
+import {workingConfig, anotherConfig} from "@/utils/utils";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { abi, FUNDRAISER_CONTRACT_ADDRESS } from "@/constants/constants";
-import { CgProfile } from "react-icons/cg";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { createConfig, http, injected, readContract } from "@wagmi/core";
-import { SiPolkadot } from "react-icons/si";
+import {readContract } from "@wagmi/core";
 import { useWriteContract, useSwitchChain } from "wagmi";
-import { sepolia } from "viem/chains";
+import { createPublicClient, http } from 'viem'
+import { sepolia } from 'viem/chains'
 
 import { queryClient } from "../providers";
 
 export default function Page({ params }: { params: { slug: string } }) {
   const [publicFundBalance, setPublicFundBalance] = useState<any>();
+  const [numberOfCampaigns, setNumberOfCampaigns] = useState<any>();
   const [loading, setLoading] = useState(true);
   const [isRunPublicFundActive, setIsRunPublicFundActive] = useState(false);
   const [value, setValue] = useState(0);
   var doubleUseEffectCorrector = 0;
-
+  
   const { writeContract } = useWriteContract();
+  const publicClient = createPublicClient({ 
+    chain: sepolia,
+    transport: http("https://rpc.sepolia.org")
+  })
+  console.log(publicClient)
 
-  const { chains, switchChain } = useSwitchChain();
 
   async function contractReader() {
     const result = await readContract(workingConfig, {
@@ -38,33 +42,34 @@ export default function Page({ params }: { params: { slug: string } }) {
     setPublicFundBalance(result);
 
     console.log(result)
+
+    const numberOfCampaigns = await readContract(workingConfig, {
+      abi,
+      address: FUNDRAISER_CONTRACT_ADDRESS,
+      functionName: "campaignCounter",
+    });
+
+    //@ts-ignore
+    setNumberOfCampaigns(numberOfCampaigns);
+    console.log((numberOfCampaigns));
     setLoading(false);
   }
 
-  const anotherConfig = createConfig({
-    chains: [sepolia],
-    transports: {
-      [sepolia.id]: http("https://rpc.sepolia.org"),
-    },
-  
-  });
+ 
 
   async function checkIsRunPublicFundActive() {
-    const isRunPublicFundActive = await readContract(anotherConfig, {
-      abi,
+    const data = await publicClient.readContract({
       address: FUNDRAISER_CONTRACT_ADDRESS,
+      abi,
       functionName: "isRunPublicFundActive",
-    });
+    })
 
-    console.log(isRunPublicFundActive);
-    //@ts-ignore
-    setIsRunPublicFundActive(isRunPublicFundActive);
+
   }
 
   useEffect(() => {
     if (doubleUseEffectCorrector < 1) {
       contractReader();
-      checkIsRunPublicFundActive()
       doubleUseEffectCorrector++;
     }
   }, []);
@@ -87,8 +92,11 @@ export default function Page({ params }: { params: { slug: string } }) {
       abi,
       address: FUNDRAISER_CONTRACT_ADDRESS,
       functionName: "runPublicFund",
-      args: [1],
+      args: [Math.floor(Math.random() * Number(numberOfCampaigns)) + 1],
     });
+
+    queryClient.invalidateQueries()
+
   }
 
   return (

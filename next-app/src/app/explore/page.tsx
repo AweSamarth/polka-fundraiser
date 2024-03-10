@@ -5,21 +5,13 @@ import Image from "next/image";
 import { createConfig, http, readContract } from '@wagmi/core'
 import { FUNDRAISER_CONTRACT_ADDRESS, abi } from "@/constants/constants";
 import { useEffect, useState } from "react";
-import { moonbaseAlpha, sepolia } from "@wagmi/core/chains";
-import Navbar from "@/components/Navbar";
+ import Navbar from "@/components/Navbar";
 import Card from "@/components/Card";
 import { injected } from '@wagmi/connectors'
 import Footer from "@/components/Footer";
+import {workingConfig, anotherConfig} from "@/utils/utils";
 
 
-export const workingConfig = createConfig({
-  chains: [moonbaseAlpha],
-  connectors: [injected()], 
-  transports: {
-    [moonbaseAlpha.id]: http("https://rpc.api.moonbase.moonbeam.network"),
-  },
-
-});
 
 export default function Home() {
   const [numCampaigns, setNumCampaigns] = useState(0);

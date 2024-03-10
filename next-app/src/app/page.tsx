@@ -6,7 +6,7 @@ import { createConfig, http, useReadContract } from "wagmi";
 import { FUNDRAISER_CONTRACT_ADDRESS, abi } from "@/constants/constants";
 import { useEffect, useState } from "react";
 import { readContract, type ReadContractParameters } from "@wagmi/core";
-import { mainnet, moonbaseAlpha, sepolia } from "viem/chains";
+import {  moonbaseAlpha,  } from "viem/chains";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -17,10 +17,9 @@ export default function Home() {
   const [numCampaigns, setNumCampaigns] = useState(0);
   const [arrayOfAllCampaigns, setArrayOfAllCampaigns] = useState<any>([]);
   const config = createConfig({
-    chains: [sepolia, moonbaseAlpha],
+    chains: [moonbaseAlpha],
     transports: {
       [moonbaseAlpha.id]: http("https://rpc.api.moonbase.moonbeam.network"),
-      [sepolia.id]: http("https://rpc.sepolia.org"),
     },
   });
   var doubleUseEffectCorrector = 0;
