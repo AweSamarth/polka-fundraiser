@@ -31,7 +31,6 @@ export default function Home() {
 
   // })
 
-  // console.log(numberOfCampaigns)
   async function contractReader() {
     const numberOfCampaigns = await readContract(config, {
       abi,
@@ -40,20 +39,17 @@ export default function Home() {
     });
 
     //@ts-ignore
-    console.log(Number(numberOfCampaigns));
 
     //@ts-ignore
     let temparray = [];
 
     for (let i = 1; i <= Number(numberOfCampaigns); i++) {
-      console.log(i, "is this");
       const campaign = await readContract(config, {
         abi,
         address: FUNDRAISER_CONTRACT_ADDRESS,
         functionName: "idToCampaign",
         args: [i],
       });
-      console.log(campaign);
       temparray.push(campaign);
       setArrayOfAllCampaigns((prev: any) => [...prev, campaign]);
     }
@@ -66,7 +62,6 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    console.log(arrayOfAllCampaigns);
   }, [arrayOfAllCampaigns]);
 
   return (

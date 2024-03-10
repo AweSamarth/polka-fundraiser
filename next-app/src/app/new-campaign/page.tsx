@@ -29,7 +29,6 @@ export default function NewCampaign() {
       args: [title, description, fundsRequired, imageUrl],
     });
 
-    console.log(result);
   }
 
   return (

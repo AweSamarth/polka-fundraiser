@@ -10,7 +10,7 @@ import { abi, FUNDRAISER_CONTRACT_ADDRESS } from "@/constants/constants";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import {readContract } from "@wagmi/core";
-import { useWriteContract, useSwitchChain } from "wagmi";
+import { useWriteContract } from "wagmi";
 import { createPublicClient, http } from 'viem'
 import { sepolia } from 'viem/chains'
 
@@ -51,7 +51,6 @@ export default function Page({ params }: { params: { slug: string } }) {
 
     setPublicFundBalance(result);
 
-    console.log(result)
 
     const numberOfCampaigns = await readContract(workingConfig, {
       abi,
@@ -61,7 +60,6 @@ export default function Page({ params }: { params: { slug: string } }) {
 
     //@ts-ignore
     setNumberOfCampaigns(numberOfCampaigns);
-    console.log((numberOfCampaigns));
 
     const isRunPublicFundActive = await readContract(workingConfig, {
       abi,
@@ -83,14 +81,12 @@ export default function Page({ params }: { params: { slug: string } }) {
   }, []);
 
   async function fundPublicFund() {
-    console.log("this ran");
     const result = writeContract({
       abi,
       address: FUNDRAISER_CONTRACT_ADDRESS,
       functionName: "fundPublicFund",
       value: BigInt(value),
     });
-
     queryClient.invalidateQueries()
 
   }

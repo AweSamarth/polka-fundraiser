@@ -21,8 +21,7 @@ export default function Page({ params }: { params: { slug: string } }) {
   const [value, setValue] = useState(0);
   var doubleUseEffectCorrector = 0;
 
-
-  const { writeContract } = useWriteContract()
+  const { writeContract } = useWriteContract();
 
   const id = params.slug;
 
@@ -34,38 +33,40 @@ export default function Page({ params }: { params: { slug: string } }) {
       args: [id],
     });
 
-    console.log(result)
 
     setCampaign(result);
     setLoading(false);
   }
 
-  useEffect(() => {
 
+  useEffect(() => {
     if (doubleUseEffectCorrector < 1) {
       contractReader();
       doubleUseEffectCorrector++;
     }
   }, []);
 
-  async function fundCampaign(){
-    console.log("this ran")
-    const result = writeContract({
-      abi,
-      address: FUNDRAISER_CONTRACT_ADDRESS,
-      functionName:"fundCampaign",
-      args:[id],
-      value: BigInt(value)
-    }
-      )
+  async function fundCampaign() {
+    const result = writeContract(
+      {
+        abi,
+        address: FUNDRAISER_CONTRACT_ADDRESS,
+        functionName: "fundCampaign",
+        args: [Number(id)],
+        value: BigInt(value),
+      },
+      {
+        onError: (error) => {
+          console.log(error);
+        },
+      }
+    );
 
-      queryClient.invalidateQueries()
-
-
+    queryClient.invalidateQueries();
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center text-white px-5 py-3  gap-1">
+    <main className="flex min-h-screen flex-col items-center justify-center text-white px-5 py-3  gap-1" suppressHydrationWarning>
       <Navbar />
       {loading ? (
         <div role="status">
@@ -107,7 +108,9 @@ export default function Page({ params }: { params: { slug: string } }) {
                 {campaign && Number(campaign[4])} funded so far
               </span>
               <Progress
-                value={campaign && Number(campaign[5]) / Number(campaign[4]) * 100}
+                value={
+                  campaign && (Number(campaign[5]) / Number(campaign[4])) * 100
+                }
                 className="h-1"
               />
             </div>
@@ -123,8 +126,8 @@ export default function Page({ params }: { params: { slug: string } }) {
               <Input
                 type="number"
                 placeholder="amount "
-                value={value?value:""}
-                onChange={(e)=>setValue(Number(e.target.value))}
+                value={value ? value : ""}
+                onChange={(e) => setValue(Number(e.target.value))}
                 className="text-lg  bg-gray-900 w-40 h- outline-none border-0"
               />
               <Button
@@ -138,9 +141,8 @@ export default function Page({ params }: { params: { slug: string } }) {
         </div>
       )}
       <div className="w-full absolute bottom-0">
-            <Footer />
-            </div>
-
+        <Footer />
+      </div>
     </main>
   );
 }

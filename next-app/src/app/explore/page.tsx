@@ -19,7 +19,6 @@ export default function Home() {
 
   var doubleUseEffectCorrector = 0;
 
-  // console.log(numberOfCampaigns)
   async function contractReader() {
     const numberOfCampaigns = await readContract(workingConfig, {
       abi,
@@ -28,20 +27,17 @@ export default function Home() {
     });
 
     //@ts-ignore
-    console.log((numberOfCampaigns));
 
     //@ts-ignore
     let temparray = [];
 
     for (let i = 1; i <= Number(numberOfCampaigns); i++) {
-      console.log(i, "is this");
       const campaign = await readContract(workingConfig, {
         abi,
         address: FUNDRAISER_CONTRACT_ADDRESS,
         functionName: "idToCampaign",
         args: [i],
       });
-      console.log(campaign);
       temparray.push(campaign);
       setArrayOfAllCampaigns((prev: any) => [...prev, campaign]);
     }
@@ -53,9 +49,7 @@ export default function Home() {
     }
   }, []);
 
-  useEffect(() => {
-    console.log(arrayOfAllCampaigns);
-  }, [arrayOfAllCampaigns]);
+
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between">
